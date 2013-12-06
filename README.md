@@ -13,7 +13,7 @@ In `handler(event, element, attribute)`:
 * `element` is the `DOMElement` that produced the event.
 * `attribute` is the name of the attribute if `event` === `'mutated'`, or `undefined` otherwise.
 
-Demo: [https://rawgithub.com/n2liquid/libtile/demo-1/field.html.](https://rawgithub.com/n2liquid/libtile/demo-1/field.html)
+Demo: [https://rawgithub.com/n2liquid/libtile/demo-1/demo.html.](https://rawgithub.com/n2liquid/libtile/demo-1/demo.html)
 
 ---
 
