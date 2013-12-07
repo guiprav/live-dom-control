@@ -38,7 +38,7 @@ var big_brother = dom_control.big_brother = new MutationObserver
                     {
                         if($target.is(selector))
                         {
-                            handlers[selector]('mutated', mutation.target, mutation.attributeName);
+                            handlers[selector]('mutated', mutation.target, mutation.attributeName, mutation.oldValue);
                         }
                     }
                 }
@@ -76,4 +76,4 @@ var big_brother = dom_control.big_brother = new MutationObserver
         );
     }
 );
-big_brother.observe(document, { attributes: true, subtree: true, childList: true });
+big_brother.observe(document, { attributes: true, attributeOldValue: true, subtree: true, childList: true });

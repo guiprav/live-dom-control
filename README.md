@@ -7,11 +7,12 @@ This library requires jQuery 1.8 or greater. This dependency may be removed in t
 
 `dom_control(selector, handler)` will call `handler(event, element, attribute)` every time an element matching `selector` is added to or removed from the DOM, and every time such an element has one of its attributes modified.
 
-In `handler(event, element, attribute)`:
+In `handler(event, element, attribute, old_value)`:
 
 * `event` is either `'added'`, `'removed'`, or `'mutated'`.
 * `element` is the `DOMElement` that produced the event.
 * `attribute` is the name of the attribute if `event` === `'mutated'`, or `undefined` otherwise.
+* `old_value` is the old attribute value if `event` === `'mutated'`, or `undefined` otherwise.
 
 Demo: [https://rawgithub.com/n2liquid/libtile/demo-1/demo.html.](https://rawgithub.com/n2liquid/libtile/demo-1/demo.html)
 
