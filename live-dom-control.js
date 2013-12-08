@@ -16,64 +16,64 @@
 */
 window.dom_control = function(selector, handler)
 {
-    dom_control.handlers[selector] = handler;
+	dom_control.handlers[selector] = handler;
 };
 dom_control.remove = function(selector)
 {
-    delete dom_control.handlers[selector];
+	delete dom_control.handlers[selector];
 };
 var handlers = dom_control.handlers = {};
 var big_brother = dom_control.big_brother = new MutationObserver
 (
-    function(mutations)
-    {
-        mutations.forEach
-        (
-            function(mutation)
-            {
-                if(mutation.attributeName)
-                {
-                    var $target = $(mutation.target);
-                    for(var selector in handlers)
-                    {
-                        if($target.is(selector))
-                        {
-                            handlers[selector]('mutated', mutation.target, mutation.attributeName, mutation.oldValue);
-                        }
-                    }
-                }
-                else
-                if(mutation.addedNodes)
-                {
-                    var $addedNodes = $(mutation.addedNodes);
-                    for(var selector in handlers)
-                    {
-                        $addedNodes.find(selector).addBack(selector).each
-                        (
-                            function(i, addedNode)
-                            {
-                                handlers[selector]('added', addedNode);
-                            }
-                        );
-                    }
-                }
-                else
-                if(mutation.removedNodes)
-                {
-                    var $removedNodes = $(mutation.removedNodes);
-                    for(var selector in handlers)
-                    {
-                        $removedNodes.find(selector).addBack(selector).each
-                        (
-                            function(i, removedNode)
-                            {
-                                handlers[selector]('removed', removedNode);
-                            }
-                        );
-                    }
-                }
-            }
-        );
-    }
+	function(mutations)
+	{
+		mutations.forEach
+		(
+			function(mutation)
+			{
+				if(mutation.attributeName)
+				{
+					var $target = $(mutation.target);
+					for(var selector in handlers)
+					{
+						if($target.is(selector))
+						{
+							handlers[selector]('mutated', mutation.target, mutation.attributeName, mutation.oldValue);
+						}
+					}
+				}
+				else
+				if(mutation.addedNodes)
+				{
+					var $addedNodes = $(mutation.addedNodes);
+					for(var selector in handlers)
+					{
+						$addedNodes.find(selector).addBack(selector).each
+						(
+							function(i, addedNode)
+							{
+								handlers[selector]('added', addedNode);
+							}
+						);
+					}
+				}
+				else
+				if(mutation.removedNodes)
+				{
+					var $removedNodes = $(mutation.removedNodes);
+					for(var selector in handlers)
+					{
+						$removedNodes.find(selector).addBack(selector).each
+						(
+							function(i, removedNode)
+							{
+								handlers[selector]('removed', removedNode);
+							}
+						);
+					}
+				}
+			}
+		);
+	}
 );
 big_brother.observe(document, { attributes: true, attributeOldValue: true, subtree: true, childList: true });
