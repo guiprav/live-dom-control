@@ -23,6 +23,7 @@ dom_control.remove = function(selector)
 	delete dom_control.handlers[selector];
 };
 var handlers = dom_control.handlers = {};
+var MutationObserver = MutationObserver || WebKitMutationObserver;
 var big_brother = dom_control.big_brother = new MutationObserver
 (
 	function(mutations)
