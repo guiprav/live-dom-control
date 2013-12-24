@@ -17,6 +17,13 @@
 window.dom_control = function(selector, handler)
 {
 	dom_control.handlers[selector] = handler;
+	$(selector).each
+	(
+		function(i, element)
+		{
+			handler('exists', element);
+		}
+	);
 };
 dom_control.remove = function(selector)
 {
