@@ -102,17 +102,17 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				else
 				if(mutation.addedNodes.length > 0)
 				{
-					var $addedNodes = $(mutation.addedNodes);
+					var $added_nodes = $(mutation.addedNodes);
 					for(var handler_id in handlers)
 					{
 						var handler_entry = handlers[handler_id];
 						var selector = handler_entry.selector;
-						$addedNodes.find(selector).addBack(selector).each
+						$added_nodes.find(selector).addBack(selector).each
 						(
-							function(i, addedNode)
+							function(i, added_node)
 							{
-								get_metadata(addedNode).handlers.push(handler_entry);
-								handler_entry.handler('added', addedNode);
+								get_metadata(added_node).handlers.push(handler_entry);
+								handler_entry.handler('added', added_node);
 							}
 						);
 					}
@@ -122,16 +122,16 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				{
 					$(mutation.removedNodes).find('*').addBack('*').each
 					(
-						function(i, removedNode)
+						function(i, removed_node)
 						{
-							var metadata = remove_metadata(removedNode);
+							var metadata = remove_metadata(removed_node);
 							if(metadata)
 							{
 								metadata.handlers.forEach
 								(
 									function(handler_entry)
 									{
-										handler_entry.handler('removed', removedNode);
+										handler_entry.handler('removed', removed_node);
 									}
 								);
 							}
