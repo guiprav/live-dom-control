@@ -14,20 +14,53 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+var last_handler_id = 0;
+function get_metadata(element)
+{
+	var $element = $(element);
+	var metadata = $element.data('live-dom-control');
+	if(!metadata)
+	{
+		metadata =
+		{
+			handlers: []
+		};
+		$element.data('live-dom-control', metadata);
+	}
+	return metadata;
+}
+function remove_metadata(element)
+{
+	var $element = $(element);
+	var metadata = $element.data('live-dom-control');
+	if(metadata)
+	{
+		$element.removeData('live-dom-control');
+	}
+	return metadata;
+}
 window.dom_control = function(selector, handler)
 {
-	dom_control.handlers[selector] = handler;
+	var handler_id = ++last_handler_id;
+	var handler_entry = dom_control.handlers[handler_id] =
+	{
+		id: handler_id,
+		selector: selector,
+		handler: handler
+	};
 	$(selector).each
 	(
 		function(i, element)
 		{
+			get_metadata(element).handlers.push(handler_entry);
 			handler('exists', element);
 		}
 	);
+	return handler_id;
 };
-dom_control.remove = function(selector)
+dom_control.remove = function(handler_id)
 {
-	delete dom_control.handlers[selector];
+	delete dom_control.handlers[handler_id];
 };
 var handlers = dom_control.handlers = {};
 var MutationObserver = MutationObserver || WebKitMutationObserver;
@@ -42,11 +75,18 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				if(mutation.attributeName)
 				{
 					var $target = $(mutation.target);
-					for(var selector in handlers)
+					for(var handler_id in handlers)
 					{
+						var handler_entry = handlers[handler_id];
 						if($target.is(selector))
 						{
-							handlers[selector]('mutated', mutation.target, mutation.attributeName, mutation.oldValue);
+							handler_entry.handler
+							(
+								'mutated',
+								mutation.target,
+								mutation.attributeName,
+								mutation.oldValue
+							);
 						}
 					}
 				}
@@ -54,13 +94,16 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				if(mutation.addedNodes.length > 0)
 				{
 					var $addedNodes = $(mutation.addedNodes);
-					for(var selector in handlers)
+					for(var handler_id in handlers)
 					{
+						var handler_entry = handlers[handler_id];
+						var selector = handler_entry.selector;
 						$addedNodes.find(selector).addBack(selector).each
 						(
 							function(i, addedNode)
 							{
-								handlers[selector]('added', addedNode);
+								get_metadata(addedNode).handlers.push(handler_entry);
+								handler_entry.handler('added', addedNode);
 							}
 						);
 					}
@@ -69,13 +112,15 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				if(mutation.removedNodes.length > 0)
 				{
 					var $removedNodes = $(mutation.removedNodes);
-					for(var selector in handlers)
+					for(var handler_id in handlers)
 					{
+						var handler_entry = handlers[handler_id];
+						var selector = handler_entry.selector;
 						$removedNodes.find(selector).addBack(selector).each
 						(
 							function(i, removedNode)
 							{
-								handlers[selector]('removed', removedNode);
+								handler_entry.handler('removed', removedNode);
 							}
 						);
 					}
