@@ -60,6 +60,15 @@ window.dom_control = function(selector, handler)
 };
 dom_control.remove = function(handler_id)
 {
+	var handler_entry = dom_control.handlers[handler_id];
+	handler_entry.elements.forEach
+	(
+		function(element)
+		{
+			remove_metadata(element);
+			handler_entry.handler('handler-removed');
+		}
+	);
 	delete dom_control.handlers[handler_id];
 };
 var handlers = dom_control.handlers = {};
