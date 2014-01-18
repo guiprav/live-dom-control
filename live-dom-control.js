@@ -111,19 +111,23 @@ var big_brother = dom_control.big_brother = new MutationObserver
 				else
 				if(mutation.removedNodes.length > 0)
 				{
-					var $removedNodes = $(mutation.removedNodes);
-					for(var handler_id in handlers)
-					{
-						var handler_entry = handlers[handler_id];
-						var selector = handler_entry.selector;
-						$removedNodes.find(selector).addBack(selector).each
-						(
-							function(i, removedNode)
+					$(mutation.removedNodes).find('*').addBack('*').each
+					(
+						function(i, removedNode)
+						{
+							var metadata = remove_metadata(removedNode);
+							if(metadata)
 							{
-								handler_entry.handler('removed', removedNode);
+								metadata.handlers.forEach
+								(
+									function(handler_entry)
+									{
+										handler_entry.handler('removed', removedNode);
+									}
+								);
 							}
-						);
-					}
+						}
+					);
 				}
 			}
 		);
