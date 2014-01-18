@@ -51,7 +51,7 @@ var big_brother = dom_control.big_brother = new MutationObserver
 					}
 				}
 				else
-				if(mutation.addedNodes)
+				if(mutation.addedNodes.length > 0)
 				{
 					var $addedNodes = $(mutation.addedNodes);
 					for(var selector in handlers)
@@ -66,7 +66,7 @@ var big_brother = dom_control.big_brother = new MutationObserver
 					}
 				}
 				else
-				if(mutation.removedNodes)
+				if(mutation.removedNodes.length > 0)
 				{
 					var $removedNodes = $(mutation.removedNodes);
 					for(var selector in handlers)
