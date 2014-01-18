@@ -87,7 +87,7 @@ var big_brother = dom_control.big_brother = new MutationObserver
 					for(var handler_id in handlers)
 					{
 						var handler_entry = handlers[handler_id];
-						if($target.is(selector))
+						if($target.is(handler_entry.selector))
 						{
 							handler_entry.handler
 							(
